@@ -27,7 +27,6 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
     recommendedCourses, 
     profile, 
     activeRole, 
-    weights,
     toggleEnrollCourse, 
     toggleCompleteCourse, 
     toggleBookmarkCourse 
@@ -58,14 +57,10 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
               Ranked Course Recommendations for {activeRole.name}
             </h1>
             <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-              Every course recommendation includes an explicit mathematical breakdown and human explanation of why it was chosen, which role-specific gaps it addresses, and its prerequisite satisfaction.
+              Each recommendation explains why it was chosen, which role-specific gaps it addresses, and how it fits your prerequisites.
             </p>
           </div>
 
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono text-slate-700 shrink-0">
-            <span className="font-semibold block text-slate-900 mb-1">Current Hybrid Formula:</span>
-            R(u,c) = {weights.content}·S_cont + {weights.gap}·S_gap + {weights.collab}·S_collab + {weights.preference}·S_pref
-          </div>
         </div>
 
         {/* Filter Controls */}
@@ -274,7 +269,7 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
             <div className="flex items-start justify-between">
               <div>
                 <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">
-                  Explainable AI Mathematical Inspector
+                  Recommendation Details
                 </span>
                 <h3 className="text-base font-bold text-slate-900 mt-1">
                   {inspectingCourse.course.title}
@@ -286,13 +281,6 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
               >
                 ✕
               </button>
-            </div>
-
-            <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-xs font-mono text-slate-700 leading-relaxed">
-              <strong>Hybrid Formula:</strong>
-              <div className="mt-1">
-                R(u,c) = ({weights.content} × {inspectingCourse.score.contentScore}) + ({weights.gap} × {inspectingCourse.score.skillGapScore}) + ({weights.collab} × {inspectingCourse.score.collaborativeScore}) + ({weights.preference} × {inspectingCourse.score.preferenceScore})
-              </div>
             </div>
 
             <div className="space-y-3 text-xs">

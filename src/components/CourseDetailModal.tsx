@@ -1,20 +1,102 @@
-import React from 'react';
 import { useStudent } from '../context/StudentContext';
-import { 
-  BookOpen, 
-  ExternalLink, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
-  Award, 
-  Code, 
-  Bookmark, 
-  Check, 
-  Sparkles,
-  ArrowRight
-} from 'lucide-react';
 import { Course } from '../types';
 import { PrerequisiteGraphEngine } from '../ml/prerequisiteGraph';
+
+const IconBase = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    {children}
+  </svg>
+);
+
+const BookOpen = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="M2 5.5A2.5 2.5 0 0 1 4.5 3H20a1 1 0 0 1 1 1v12.5a2.5 2.5 0 0 0-2.5-2.5H4.5A2.5 2.5 0 0 0 2 14.5v-9Z" />
+    <path d="M2 18.5A2.5 2.5 0 0 1 4.5 16H20" />
+    <path d="M8 7h8" />
+    <path d="M8 11h8" />
+  </IconBase>
+);
+
+const ExternalLink = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="M14 3h7v7" />
+    <path d="M10 14 21 3" />
+    <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
+  </IconBase>
+);
+
+const CheckCircle2 = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="M9 11.5 11 13.5l4-5" />
+    <circle cx="12" cy="12" r="9" />
+  </IconBase>
+);
+
+const AlertCircle = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 8v4" />
+    <path d="M12 16h.01" />
+  </IconBase>
+);
+
+const Clock = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </IconBase>
+);
+
+const Award = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <circle cx="12" cy="9" r="6" />
+    <path d="M12 15v5l-2-1-2 1v-5" />
+    <path d="M14 15h3.5a2.5 2.5 0 0 0 2.5-2.5V9" />
+  </IconBase>
+);
+
+const Code = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="m9 18 6-12" />
+    <path d="m15 3 5 9-5 9" />
+    <path d="M9 3 4 12l5 9" />
+  </IconBase>
+);
+
+const Bookmark = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="M6 3.5h12a1 1 0 0 1 1 1v16l-7-4-7 4v-16a1 1 0 0 1 1-1Z" />
+  </IconBase>
+);
+
+const Check = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="m5 12 4 4L19 2" />
+  </IconBase>
+);
+
+const Sparkles = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="m12 2 1.6 4.9L18.5 8l-4.9 1.1L12 14l-1.6-4.9L5.5 8l4.9-1.1L12 2Z" />
+    <path d="m18.5 13 1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3Z" />
+  </IconBase>
+);
+
+const ArrowRight = ({ className }: { className?: string }) => (
+  <IconBase className={className}>
+    <path d="M5 12h14" />
+    <path d="m13 5 7 7-7 7" />
+  </IconBase>
+);
 
 interface CourseDetailModalProps {
   courseId: string | null;

@@ -1,6 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import { useStudent } from '../context/StudentContext';
-import { Target, AlertTriangle, CheckCircle, HelpCircle, ArrowUpRight, Play, BookOpen } from 'lucide-react';
+import { Target, ArrowUpRight, BookOpen } from 'lucide-react';
 import { SkillGapEngine } from '../ml/skillGapEngine';
 
 interface SkillGapAnalyzerProps {
@@ -10,7 +10,7 @@ interface SkillGapAnalyzerProps {
 export const SkillGapAnalyzer: React.FC<SkillGapAnalyzerProps> = ({
   onSelectCourse
 }) => {
-  const { profile, activeRole, updateSkillMastery, allCourses, recommendedCourses } = useStudent();
+  const { profile, activeRole, updateSkillMastery, allCourses } = useStudent();
   const skillGapEngine = new SkillGapEngine();
   const gaps = skillGapEngine.calculateSkillGaps(profile, activeRole);
 
