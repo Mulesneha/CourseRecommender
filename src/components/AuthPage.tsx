@@ -32,11 +32,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onContinue }) => {
     event.preventDefault();
     setError('');
 
-    if (isSignup && !name.trim()) {
-      setError('Enter your name to create an account.');
-      return;
-    }
-
     if (isSignup && password !== confirmPassword) {
       setError('Your passwords do not match.');
       return;

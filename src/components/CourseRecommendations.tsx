@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { useStudent } from '../context/StudentContext';
-import { 
-  BookOpen, 
-  Sparkles, 
-  CheckCircle2, 
-  AlertCircle, 
-  Clock, 
-  Award, 
-  Bookmark, 
-  Filter, 
-  Calculator, 
-  ChevronDown, 
-  ExternalLink,
+import {
+  Sparkles,
+  CheckCircle2,
+  AlertCircle,
+  Bookmark,
+  Filter,
   Check
 } from 'lucide-react';
-import { RecommendedCourse, DifficultyLevel } from '../types';
+import { DifficultyLevel } from '../types';
 
 interface CourseRecommendationsProps {
   onSelectCourse: (courseId: string) => void;
@@ -23,18 +17,17 @@ interface CourseRecommendationsProps {
 export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
   onSelectCourse
 }) => {
-  const { 
-    recommendedCourses, 
-    profile, 
-    activeRole, 
-    toggleEnrollCourse, 
-    toggleCompleteCourse, 
-    toggleBookmarkCourse 
+  const {
+    recommendedCourses,
+    profile,
+    activeRole,
+    toggleEnrollCourse,
+    toggleCompleteCourse,
+    toggleBookmarkCourse
   } = useStudent();
 
   const [selectedLevel, setSelectedLevel] = useState<DifficultyLevel | 'All'>('All');
   const [filterPrereqOnly, setFilterPrereqOnly] = useState<boolean>(false);
-  const [inspectingCourse, setInspectingCourse] = useState<RecommendedCourse | null>(null);
 
   // Filter recommendations
   const filtered = recommendedCourses.filter(item => {
@@ -45,22 +38,19 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
 
   return (
     <div className="space-y-8 pb-12">
-      {/* Header & Feature 05 Explainable AI concept */}
+      {/* Header */}
       <div className="bg-white rounded-xl border border-slate-200 p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-1">
-              <Sparkles className="w-4 h-4" />
-              Explainable Course Recommendations
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-              Ranked Course Recommendations for {activeRole.name}
-            </h1>
-            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-              Each recommendation explains why it was chosen, which role-specific gaps it addresses, and how it fits your prerequisites.
-            </p>
+        <div className="max-w-3xl">
+          <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-1">
+            <Sparkles className="w-4 h-4" />
+            Course Recommendations
           </div>
-
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Ranked Course Recommendations for {activeRole.name}
+          </h1>
+          <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+            Every course shows why it was chosen, which skill gaps it closes, and whether you meet its prerequisites.
+          </p>
         </div>
 
         {/* Filter Controls */}
@@ -102,7 +92,7 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
         </div>
       </div>
 
-      {/* Recommended Courses Grid */}
+      {/* Recommended Courses */}
       <div className="space-y-4">
         {filtered.map((item) => {
           const { course, score, rank, priority } = item;
@@ -111,11 +101,11 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
           const isBookmarked = profile.bookmarkedCourseIds.includes(course.id);
 
           return (
-            <div 
+            <div
               key={course.id}
               className={`bg-white rounded-xl border transition-all p-6 ${
-                isCompleted 
-                  ? 'border-emerald-200 bg-emerald-50/20' 
+                isCompleted
+                  ? 'border-emerald-200 bg-emerald-50/20'
                   : isEnrolled
                   ? 'border-indigo-200 bg-indigo-50/10'
                   : 'border-slate-200 hover:border-indigo-300 shadow-xs'
@@ -147,7 +137,7 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
                     <span className="text-slate-600 tabular-nums">★ {course.rating} ({course.review_count.toLocaleString()})</span>
                   </div>
 
-                  <h2 
+                  <h2
                     onClick={() => onSelectCourse(course.id)}
                     className="text-lg font-bold text-slate-900 hover:text-indigo-600 cursor-pointer transition-colors"
                   >
@@ -158,18 +148,18 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
                     {course.description}
                   </p>
 
-                  {/* Explainable AI Highlight Box */}
+                  {/* Why this course */}
                   <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-xs leading-relaxed text-slate-700">
                     <div className="font-semibold text-slate-900 flex items-center gap-1.5 mb-1">
                       <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                      Explainable Match Rationale:
+                      Why this course:
                     </div>
                     <p className="text-slate-600">
                       {score.explanation}
                     </p>
                   </div>
 
-                  {/* Skills Tagged & Prerequisite Indicator */}
+                  {/* Skills & Prerequisite Indicator */}
                   <div className="flex flex-wrap items-center gap-4 pt-1 text-xs">
                     <div className="flex items-center gap-1.5 text-slate-500">
                       <span>Skills:</span>
@@ -200,32 +190,24 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
                   </div>
                 </div>
 
-                {/* Score Pill & Interactive Actions */}
+                {/* Match score & actions */}
                 <div className="flex lg:flex-col items-center lg:items-end justify-between lg:justify-start gap-4 lg:w-48 shrink-0">
                   <div className="text-right">
                     <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                      Hybrid Score
+                      Match Score
                     </div>
                     <div className="text-2xl font-extrabold text-indigo-600 tabular-nums">
                       {Math.round(score.totalScore * 100)}%
                     </div>
-                    <button
-                      onClick={() => setInspectingCourse(item)}
-                      className="mt-1 text-[11px] text-slate-500 hover:text-indigo-600 font-medium flex items-center gap-1 lg:justify-end"
-                    >
-                      <Calculator className="w-3 h-3" />
-                      Inspect Weights
-                    </button>
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="flex items-center gap-2 mt-2">
                     <button
                       onClick={() => toggleBookmarkCourse(course.id)}
                       title={isBookmarked ? 'Bookmarked' : 'Bookmark'}
                       className={`p-2 rounded-lg border transition-colors ${
-                        isBookmarked 
-                          ? 'border-indigo-300 text-indigo-600 bg-indigo-50' 
+                        isBookmarked
+                          ? 'border-indigo-300 text-indigo-600 bg-indigo-50'
                           : 'border-slate-200 text-slate-400 hover:text-slate-700 bg-white'
                       }`}
                     >
@@ -235,8 +217,8 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
                     <button
                       onClick={() => toggleEnrollCourse(course.id)}
                       className={`px-3 py-2 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
-                        isEnrolled 
-                          ? 'bg-slate-200 text-slate-800' 
+                        isEnrolled
+                          ? 'bg-slate-200 text-slate-800'
                           : 'bg-slate-900 text-white hover:bg-slate-800'
                       }`}
                     >
@@ -247,8 +229,8 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
                       onClick={() => toggleCompleteCourse(course.id)}
                       title={isCompleted ? 'Mark Incomplete' : 'Mark Completed (Updates Skill Profile)'}
                       className={`p-2 rounded-lg border transition-colors ${
-                        isCompleted 
-                          ? 'bg-emerald-600 border-emerald-600 text-white' 
+                        isCompleted
+                          ? 'bg-emerald-600 border-emerald-600 text-white'
                           : 'border-slate-200 text-slate-500 hover:text-emerald-600 bg-white'
                       }`}
                     >
@@ -261,88 +243,6 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
           );
         })}
       </div>
-
-      {/* Mathematical Breakdown Modal */}
-      {inspectingCourse && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl border border-slate-200 max-w-lg w-full p-6 shadow-xl space-y-5 animate-in fade-in-50 zoom-in-95">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">
-                  Recommendation Details
-                </span>
-                <h3 className="text-base font-bold text-slate-900 mt-1">
-                  {inspectingCourse.course.title}
-                </h3>
-              </div>
-              <button
-                onClick={() => setInspectingCourse(null)}
-                className="text-slate-400 hover:text-slate-600 p-1 text-sm font-bold"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between p-2 rounded bg-slate-50">
-                <div>
-                  <span className="font-semibold text-slate-900 block">S_content (TF-IDF Similarity)</span>
-                  <span className="text-slate-500">Cosine similarity between student role profile and course vectors</span>
-                </div>
-                <span className="font-mono font-bold text-slate-800 text-sm">
-                  {inspectingCourse.score.contentScore}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded bg-slate-50">
-                <div>
-                  <span className="font-semibold text-slate-900 block">S_gap (Role Skill Gap Fit)</span>
-                  <span className="text-slate-500">Coverage of unmastered high-importance skills for {activeRole.name}</span>
-                </div>
-                <span className="font-mono font-bold text-slate-800 text-sm">
-                  {inspectingCourse.score.skillGapScore}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded bg-slate-50">
-                <div>
-                  <span className="font-semibold text-slate-900 block">S_collab (Collaborative Cohort Filtering)</span>
-                  <span className="text-slate-500">Item similarity and placement cohort completion path patterns</span>
-                </div>
-                <span className="font-mono font-bold text-slate-800 text-sm">
-                  {inspectingCourse.score.collaborativeScore}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded bg-slate-50">
-                <div>
-                  <span className="font-semibold text-slate-900 block">S_preference (Student Fit)</span>
-                  <span className="text-slate-500">Match with {profile.weeklyStudyHours}h/wk schedule, budget, and level</span>
-                </div>
-                <span className="font-mono font-bold text-slate-800 text-sm">
-                  {inspectingCourse.score.preferenceScore}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2 rounded bg-indigo-50 border border-indigo-100">
-                <span className="font-bold text-indigo-900">Final Composite Hybrid Score:</span>
-                <span className="font-mono font-extrabold text-indigo-700 text-base">
-                  {Math.round(inspectingCourse.score.totalScore * 100)}%
-                </span>
-              </div>
-            </div>
-
-            <div className="text-right">
-              <button
-                onClick={() => setInspectingCourse(null)}
-                className="px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
