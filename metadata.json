@@ -1,0 +1,6 @@
+{
+  "name": "NextCourse",
+  "description": "Hybrid ML-based course recommendation system for college students, featuring placement skill gap analysis, prerequisite-aware sequencing, and adaptive learning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
