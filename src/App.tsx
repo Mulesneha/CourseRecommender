@@ -4,6 +4,7 @@ import { Navbar, NavTab } from './components/Navbar';
 import { SkillGapAnalyzer } from './components/SkillGapAnalyzer';
 import { CourseRecommendations } from './components/CourseRecommendations';
 import { CourseDetailModal } from './components/CourseDetailModal';
+import { AuthPage, AuthIdentity } from './components/AuthPage';
 
 const CARD = '[class*="bg-white"][class*="rounded-"]';
 
@@ -55,15 +56,49 @@ const ControlBar: React.FC = () => {
 };
 
 const AppContent: React.FC = () => {
-  const { resetToSampleProfile } = useStudent();
+  const { resetToSampleProfile, updateProfileIdentity } = useStudent();
   const [tab, setTab] = useState<NavTab>('recommendations');
   const [courseId, setCourseId] = useState<string | null>(null);
+  const [identity, setIdentity] = useState<AuthIdentity | null>(() => {
+    const saved = sessionStorage.getItem('nextcourse_demo_session');
+    if (!saved) return null;
+    try {
+      const parsed: unknown = JSON.parse(saved);
+      if (
+        typeof parsed === 'object' &&
+        parsed !== null &&
+        'name' in parsed &&
+        'email' in parsed &&
+        typeof parsed.name === 'string' &&
+        typeof parsed.email === 'string'
+      ) {
+        return { name: parsed.name, email: parsed.email };
+      }
+    } catch (error) {
+      console.error('Could not restore the demo session:', error);
+    }
+    sessionStorage.removeItem('nextcourse_demo_session');
+    return null;
+  });
   useTilt();
+
+  const continueWithIdentity = (nextIdentity: AuthIdentity) => {
+    updateProfileIdentity(nextIdentity.name, nextIdentity.email);
+    sessionStorage.setItem('nextcourse_demo_session', JSON.stringify(nextIdentity));
+    setIdentity(nextIdentity);
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem('nextcourse_demo_session');
+    setIdentity(null);
+  };
+
+  if (!identity) return <AuthPage onContinue={continueWithIdentity} />;
 
   return (
     <div className="min-h-screen flex flex-col text-slate-900 relative overflow-x-clip">
       <div className="orb orb-a" /><div className="orb orb-b" /><div className="orb orb-c" />
-      <Navbar activeTab={tab} onTabChange={setTab} onReset={resetToSampleProfile} />
+      <Navbar activeTab={tab} onTabChange={setTab} onReset={resetToSampleProfile} onLogout={logout} />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10 float-in">
         <ControlBar />
         {tab === 'recommendations' && <CourseRecommendations onSelectCourse={setCourseId} />}

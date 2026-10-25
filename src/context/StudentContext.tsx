@@ -27,6 +27,7 @@ interface StudentContextType {
   setAlpha: (val: number) => void;
   setWeights: (weights: HybridWeights) => void;
   setTargetRole: (roleId: string) => void;
+  updateProfileIdentity: (name: string, email: string) => void;
   updateStudyPreferences: (hours: number, weeks: number) => void;
   updateSkillMastery: (skill: string, mastery: number) => void;
   submitQuizResult: (skill: string, score: number) => { oldMastery: number; newMastery: number; formula: string };
@@ -150,6 +151,10 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }));
   };
 
+  const updateProfileIdentity = (name: string, email: string) => {
+    setProfile(prev => ({ ...prev, name, email }));
+  };
+
   const updateStudyPreferences = (weeklyStudyHours: number, weeksUntilPlacement: number) => {
     setProfile(prev => ({
       ...prev,
@@ -262,6 +267,7 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setAlpha,
         setWeights,
         setTargetRole,
+        updateProfileIdentity,
         updateStudyPreferences,
         updateSkillMastery,
         submitQuizResult,

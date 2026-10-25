@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, BookOpen, RotateCcw } from 'lucide-react';
+import { Target, BookOpen, RotateCcw, LogOut } from 'lucide-react';
 
 export type NavTab = 'recommendations' | 'skill-gaps';
 
@@ -7,6 +7,7 @@ interface NavbarProps {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
   onReset: () => void;
+  onLogout: () => void;
 }
 
 const TABS: { id: NavTab; label: string; icon: React.ReactNode }[] = [
@@ -14,7 +15,7 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode }[] = [
   { id: 'skill-gaps', label: 'Skill Gap Analyzer', icon: <Target className="w-4 h-4" /> },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onReset }) => (
+export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onReset, onLogout }) => (
   <header className="sticky top-0 z-40 glass border-b border-white/60">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       <button onClick={() => onTabChange('recommendations')} className="flex items-center gap-3 text-left">
@@ -41,9 +42,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onReset 
         ))}
       </nav>
 
-      <button onClick={onReset} title="Reset profile" className="p-2.5 rounded-xl bg-white/70 hover:bg-white text-slate-600 shadow-sm hover:-translate-y-0.5 transition-all">
-        <RotateCcw className="w-4 h-4" />
-      </button>
+      <div className="flex items-center gap-2">
+        <button onClick={onReset} title="Reset profile" aria-label="Reset profile" className="p-2.5 rounded-xl bg-white/70 hover:bg-white text-slate-600 shadow-sm hover:-translate-y-0.5 transition-all">
+          <RotateCcw className="w-4 h-4" />
+        </button>
+        <button onClick={onLogout} title="Log out" aria-label="Log out" className="p-2.5 rounded-xl bg-white/70 hover:bg-white text-slate-600 shadow-sm hover:-translate-y-0.5 transition-all">
+          <LogOut className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   </header>
 );
