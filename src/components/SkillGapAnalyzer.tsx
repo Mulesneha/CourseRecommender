@@ -27,29 +27,8 @@ export const SkillGapAnalyzer: React.FC<SkillGapAnalyzerProps> = ({
             Placement Skill Gap Analysis for {activeRole.name}
           </h1>
           <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-            Unlike basic keyword-matching recommenders, NextCourse computes individual skill gaps using{' '}
-            <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded font-mono text-indigo-700">
-              G(u, s) = max(0, T_s - M_{'{u,s}'})
-            </code>{' '}
-            and weights them by market role importance (<code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded font-mono text-indigo-700">w_s</code>).
-            Foundational gaps are prioritized before high-level frameworks.
+            Your personalized roadmap for {activeRole.name}: explore your strengths, discover skills to build, and choose your next step.
           </p>
-        </div>
-
-        {/* Formula Summary Box */}
-        <div className="mt-6 p-4 rounded-lg bg-slate-50 border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div>
-            <span className="font-semibold text-slate-900 block mb-0.5">Target Proficiency (T_s)</span>
-            <span className="text-slate-500">Benchmark required by hiring teams during technical coding and interview rounds.</span>
-          </div>
-          <div>
-            <span className="font-semibold text-slate-900 block mb-0.5">Estimated Mastery (M_{'{u,s}'})</span>
-            <span className="text-slate-500">Continuously updated via diagnostic quizzes using smoothed Bayesian knowledge updates.</span>
-          </div>
-          <div>
-            <span className="font-semibold text-slate-900 block mb-0.5">Ranked Priority (w_s × G)</span>
-            <span className="text-slate-500">Prioritizes high-weight gaps to maximize placement hiring readiness in minimum study weeks.</span>
-          </div>
         </div>
       </div>
 
