@@ -4,7 +4,7 @@ NextCourse is a client-side learning dashboard that helps students find courses 
 
 ## Features
 
-- **Account screen:** Demo signup and login forms, with password confirmation and a password visibility toggle.
+ **Account screen:** Demo signup and login forms, with password confirmation and a password visibility toggle.
 - **Course recommendations:** Ranks courses using content similarity, skill gaps, collaborative filtering, learner preferences, and prerequisite checks.
 - **Skill gap analysis:** Compare your current skills with the requirements of a target career role.
 - **Personalized study settings:** Choose a target role and weekly study hours to update recommendations and the study plan.
