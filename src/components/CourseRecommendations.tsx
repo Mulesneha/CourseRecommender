@@ -19,6 +19,8 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
 }) => {
   const {
     recommendedCourses,
+    recommendationsLoading,
+    recommendationError,
     profile,
     activeRole,
     toggleEnrollCourse,
@@ -52,6 +54,17 @@ export const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({
             Every course shows why it was chosen, which skill gaps it closes, and whether you meet its prerequisites.
           </p>
         </div>
+
+        {recommendationsLoading && (
+          <p className="mt-4 text-sm text-indigo-700" role="status">
+            Loading personalized recommendations from the Python TF-IDF API...
+          </p>
+        )}
+        {recommendationError && (
+          <p className="mt-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700" role="alert">
+            {recommendationError}
+          </p>
+        )}
 
         {/* Filter Controls */}
         <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">

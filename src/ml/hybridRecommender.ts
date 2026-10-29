@@ -52,7 +52,8 @@ export class HybridRecommendationEngine {
     options: {
       filterCompleted?: boolean;
       requirePrereqs?: boolean;
-    } = { filterCompleted: true, requirePrereqs: false }
+    } = { filterCompleted: true, requirePrereqs: false },
+    contentScores?: ReadonlyMap<string, number>
   ): RecommendedCourse[] {
     // 1. Build student profile text representation for TF-IDF
     const userProfileText = `${role.name} ${role.description} ${role.skills.map(s => s.skill).join(' ')} ${profile.education} ${profile.yearOfStudy}`;
@@ -72,7 +73,8 @@ export class HybridRecommendationEngine {
       // 1. Content Similarity S_content
       const courseText = `${course.title} ${course.description} ${course.skills.join(' ')} ${course.career_roles.join(' ')} ${course.syllabus.join(' ')}`;
       const courseVector = this.tfidfEngine.transform(courseText);
-      const contentScore = this.tfidfEngine.cosineSimilarity(userVector, courseVector);
+      const contentScore = contentScores?.get(course.id)
+        ?? this.tfidfEngine.cosineSimilarity(userVector, courseVector);
 
       // 2. Skill Gap Score S_gap
       const { score: gapScore, addressedGaps } = this.skillGapEngine.calculateCourseGapScore(course, profile, role);

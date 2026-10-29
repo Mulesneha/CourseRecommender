@@ -20,6 +20,8 @@ interface StudentContextType {
   allRoles: CareerRole[];
   allCourses: Course[];
   recommendedCourses: RecommendedCourse[];
+  recommendationsLoading: boolean;
+  recommendationError: string | null;
   readiness: PlacementReadiness;
   weeklyPlan: WeeklyMilestone[];
   weights: HybridWeights;
@@ -85,6 +87,15 @@ const INITIAL_STUDENT_PROFILE: StudentProfile = {
 
 const StudentContext = createContext<StudentContextType | undefined>(undefined);
 
+const isCourseScore = (item: unknown): item is { id: string; score: number } =>
+  typeof item === 'object'
+  && item !== null
+  && 'id' in item
+  && typeof item.id === 'string'
+  && 'score' in item
+  && typeof item.score === 'number'
+  && Number.isFinite(item.score);
+
 export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [profile, setProfile] = useState<StudentProfile>(() => {
     const saved = localStorage.getItem('nextcourse_student_profile');
@@ -129,8 +140,66 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   // Compute recommendations
-  const recommendedCourses = useMemo(() => {
-    return hybridEngine.recommendCourses(profile, activeRole, weights);
+  const [recommendedCourses, setRecommendedCourses] = useState<RecommendedCourse[]>([]);
+  const [recommendationsLoading, setRecommendationsLoading] = useState(true);
+  const [recommendationError, setRecommendationError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const learnerProfile = [
+      activeRole.name,
+      activeRole.description,
+      activeRole.skills.map(skill => `${skill.skill} ${skill.description}`).join(' '),
+      profile.education,
+      profile.yearOfStudy
+    ].join(' ');
+
+    setRecommendationsLoading(true);
+    setRecommendationError(null);
+
+    const loadRecommendations = async () => {
+      try {
+        const response = await fetch('/api/recommendations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            courses: COURSES_DATA,
+            learner_profile: learnerProfile
+          }),
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`Recommendation API returned HTTP ${response.status}`);
+        }
+
+        const payload: unknown = await response.json();
+        if (!Array.isArray(payload) || !payload.every(isCourseScore)) {
+          throw new Error('Recommendation API returned an invalid response');
+        }
+
+        const contentScores = new Map<string, number>(
+          payload.map(item => [item.id, item.score] as const)
+        );
+        setRecommendedCourses(
+          hybridEngine.recommendCourses(profile, activeRole, weights, undefined, contentScores)
+        );
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        setRecommendationError(
+          `Python API unavailable (${message}). Showing local recommendations for now. To enable Python TF-IDF, install dependencies with "python -m pip install -r python\\requirements.txt", then run "npm run dev:api" in a second terminal.`
+        );
+        setRecommendedCourses(
+          hybridEngine.recommendCourses(profile, activeRole, weights)
+        );
+      } finally {
+        if (!controller.signal.aborted) setRecommendationsLoading(false);
+      }
+    };
+
+    void loadRecommendations();
+    return () => controller.abort();
   }, [hybridEngine, profile, activeRole, weights]);
 
   // Compute readiness
@@ -260,6 +329,8 @@ export const StudentProvider: React.FC<{ children: React.ReactNode }> = ({ child
         allRoles: CAREER_ROLES,
         allCourses: COURSES_DATA,
         recommendedCourses,
+        recommendationsLoading,
+        recommendationError,
         readiness,
         weeklyPlan,
         weights,
